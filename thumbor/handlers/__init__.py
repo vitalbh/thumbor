@@ -40,7 +40,7 @@ class BaseHandler(tornado.web.RequestHandler):
                       opt['crop']['right'] > 0 or \
                       opt['crop']['bottom'] > 0
 
-        crop_left = crop_top = crop_right = crop_bottom = None
+        crop_left = crop_top = crop_right = crop_bottom = mark = watermark_pos =None
         if should_crop:
             crop_left = opt['crop']['left']
             crop_top = opt['crop']['top']
@@ -59,13 +59,17 @@ class BaseHandler(tornado.web.RequestHandler):
         valign = opt['valign']
 
         extension = splitext(image)[-1].lower()
-
+        
+        if opt['mark']:
+            mark = opt['mark']
+        if opt['watermark_pos']:   
+            watermark_pos = opt['watermark_pos']
         self.get_image(opt['meta'], should_crop, crop_left,
                        crop_top, crop_right, crop_bottom,
                        opt['fit_in'],
                        opt['horizontal_flip'], width, opt['vertical_flip'],
                        height, halign, valign, extension,
-                       opt['smart'], image)
+                       opt['smart'],mark,watermark_pos, image)
 
     def get_image(self,
                   meta,
@@ -83,6 +87,8 @@ class BaseHandler(tornado.web.RequestHandler):
                   valign,
                   extension,
                   should_be_smart,
+                  mark,
+                  watermark_pos,
                   image
                   ):
         def callback(buffer):
@@ -107,6 +113,8 @@ class BaseHandler(tornado.web.RequestHandler):
                 height=height,
                 halign=halign,
                 valign=valign,
+                mark=mark,
+                watermark_pos=watermark_pos,
                 extension=extension,
                 focal_points=[]
             )

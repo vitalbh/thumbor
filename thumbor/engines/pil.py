@@ -12,7 +12,7 @@ from cStringIO import StringIO
 
 from PIL import Image, ImageFile 
 from tornado.options import options
-
+from thumbor.engines import watermark
 from thumbor.engines import BaseEngine
 
 FORMATS = {
@@ -46,6 +46,9 @@ class Engine(BaseEngine):
     def flip_horizontally(self):
         self.image = self.image.transpose(Image.FLIP_LEFT_RIGHT)
 
+    def watermark(self,mark,watermark_pos):
+        self.image = watermark.makeWaterMark(self.image,mark,watermark_pos)
+        
     def read(self, extension=None, quality=options.QUALITY):
         #returns image buffer in byte format.
         img_buffer = StringIO()

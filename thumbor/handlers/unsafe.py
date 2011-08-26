@@ -29,6 +29,8 @@ class MainHandler(ContextHandler):
             halign,
             valign,
             smart,
+            mark,
+            watermark_pos,
             image,
             **kw):
 
@@ -53,7 +55,9 @@ class MainHandler(ContextHandler):
             'vertical_flip': vertical_flip == '-',
             'halign': halign or 'center',
             'valign': valign or 'middle',
-            'smart': smart == 'smart'
+            'smart': smart == 'smart',
+            'mark': mark,
+            'watermark_pos': watermark_pos
         }
 
         return self.execute_image_operations(opt, image)

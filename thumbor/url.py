@@ -19,6 +19,7 @@ class Url(object):
     halign = r'(?:(?P<halign>left|right|center)/)?'
     valign = r'(?:(?P<valign>top|bottom|middle)/)?'
     smart = r'(?:(?P<smart>smart)/)?'
+    mark = r'(?:(watermark\((?P<mark>.+),(?P<watermark_pos>(tl|tc|tr|cl|cc|cr|bl|bc|br))\)/))?'
     image = r'(?P<image>.+)'
 
     @classmethod
@@ -35,6 +36,8 @@ class Url(object):
         reg.append(cls.halign)
         reg.append(cls.valign)
         reg.append(cls.smart)
+        reg.append(cls.mark)
+        
 
         if include_image:
             reg.append(cls.image)
@@ -74,6 +77,9 @@ class Url(object):
             'halign': result['halign'] or 'center',
             'valign': result['valign'] or 'middle',
             'smart': result['smart'] == 'smart',
+            'mark': result['mark'] or None,
+            'watermark_pos': result['watermark_pos'] or None,
+            
             'image': 'image' in result and result['image'] or None
         }
 
@@ -93,7 +99,9 @@ class Url(object):
                          crop_left=None,
                          crop_top=None,
                          crop_right=None,
-                         crop_bottom=None):
+                         crop_bottom=None,
+                         mark=None,
+                         watermark_pos=None):
 
         url = []
 
@@ -124,6 +132,9 @@ class Url(object):
             url.append(halign)
         if valign != 'middle':
             url.append(valign)
+
+        if mark and watermark_pos:
+            url.append('watermark(%s,%s)' % (mark,watermark_pos))
 
         if smart:
             url.append('smart')

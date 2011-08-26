@@ -18,6 +18,7 @@ class Transformer(object):
         self.engine = self.context['engine']
         self.calculate_target_dimensions()
         self.calculate_focal_points()
+        
 
     def calculate_target_dimensions(self):
         source_width, source_height = self.engine.size
@@ -56,12 +57,16 @@ class Transformer(object):
     def transform(self):
         self.manual_crop()
         
+        
         if self.context['fit_in']:
             self.fit_in_resize()
         else:
             self.auto_crop()
             self.resize()
         self.flip()
+        
+        if self.context['mark'] and self.context['watermark_pos']:
+            self.engine.watermark(self.context['mark'],self.context['watermark_pos']);
 
     def manual_crop(self):
         if self.context['should_crop']:

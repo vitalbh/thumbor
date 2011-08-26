@@ -52,6 +52,9 @@ class Engine(BaseEngine):
 
     def flip_horizontally(self):
         self.image.flop()
+        
+    def watermark(self,mark,watermark_pos):
+        return None
     
     def read(self, extension=None, quality=options.QUALITY):
         #returns image buffer in byte format.
